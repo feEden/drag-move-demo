@@ -9,8 +9,9 @@ export default defineConfig({
     title: 'drag move demo',
   },
   output: {
+    assetPrefix: './',
     distPath: {
-      root: 'docs'
+      root: 'docs',
     },
   }
 });
