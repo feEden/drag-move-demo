@@ -60,17 +60,11 @@ const CardResize: FC<CardResizePropsType> = ({
         x, y
       }, w, h, moveLastBoundingClientRect } = offsetPositionRef.current;
       const { left: moveDomLastLeft, top: moveDomLastTop } = moveLastBoundingClientRect;
-      // const moveDomRight = moveDomLastLeft + w;
-      // const moveDomBottom = moveDomLastTop + h;
 
       const { x: parentRectX, y: parentRectY } = parentRect;
       const dx = e.clientX - x;
       const dy = e.clientY - y;
 
-      // let left = moveDomLastLeft - parentRectX,
-      //   top = moveDomLastTop - parentRectY,
-      //   width = w,
-      //   height = h;
       let left,
         top,
         width,
@@ -87,13 +81,13 @@ const CardResize: FC<CardResizePropsType> = ({
           height = h - dy;
           left = moveDomLastLeft - parentRectX;
           // <= 0 时，top 固定为初始的bottom
-          top = (height > 0 ? e.clientY : h + moveDomLastTop) - parentRectY;
+          top = (height > 0 ? moveDomLastTop + dy : h + moveDomLastTop) - parentRectY;
           break;
         case 'lc':
           height = h;
           width = w - dx;
           top = moveDomLastTop - parentRectY;
-          left = (width > 0 ? e.clientX : w + moveDomLastLeft) - parentRectX;
+          left = (width > 0 ? moveDomLastLeft + dx : w + moveDomLastLeft) - parentRectX;
           break;
         case 'rc':
           height = h;
@@ -110,24 +104,24 @@ const CardResize: FC<CardResizePropsType> = ({
         case 'bl':
           width = w - dx;
           height = h + dy;
-          left = (width > 0 ? e.clientX : w + moveDomLastLeft) - parentRectX
+          left = (width > 0 ? moveDomLastLeft + dx : w + moveDomLastLeft) - parentRectX
           top = (height > 0 ? moveDomLastTop : moveDomLastTop + height) - parentRectY;
           break;
         case 'tl':
           width = w - dx;
           height = h - dy;
-          left = (width > 0 ? e.clientX : w + moveDomLastLeft) - parentRectX
-          top = (height > 0 ? e.clientY : h + moveDomLastTop) - parentRectY;
+          left = (width > 0 ? moveDomLastLeft + dx : w + moveDomLastLeft) - parentRectX
+          top = (height > 0 ? moveDomLastTop + dy : h + moveDomLastTop) - parentRectY;
           break;
         case 'tr':
           width = w + dx;
           height = h - dy;
           left = (width > 0 ? moveDomLastLeft : moveDomLastLeft + width) - parentRectX;
-          top = (height > 0 ? e.clientY : h + moveDomLastTop) - parentRectY;
+          top = (height > 0 ? moveDomLastTop + dy : h + moveDomLastTop) - parentRectY;
           break;
       }
 
-      resizeByDom({ dom: moveDom, top: top, left: left, height: Math.abs(height), width: Math.abs(width), scaleSize }, (layout) => {
+      resizeByDom({ dom: moveDom, top, left, height: Math.abs(height), width: Math.abs(width), scaleSize }, (layout) => {
         onUpdateCardItem(layout);
       });
     },
