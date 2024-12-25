@@ -30,4 +30,3 @@ Preview the production build locally:
 ```bash
 pnpm preview
 ```
-# drag-move-demo
